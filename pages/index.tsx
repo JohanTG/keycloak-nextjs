@@ -2,6 +2,7 @@ import {useEffect, useState} from 'react';
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
+import Link from 'next/link'
 import styles from '../styles/Home.module.scss'
 
 const defaultEndpoint = `https://rickandmortyapi.com/api/character/`;
@@ -62,6 +63,21 @@ const Home: NextPage = ({data}: any) => {
     });
   }
 
+  function handleOnSubmitSearch(e) {
+    e.preventDefault();
+
+    const { currentTarget = {} } = e;
+    const fields = Array.from(currentTarget?.elements);
+    const fieldQuery = fields.find(field => field.name === 'query');
+
+    const value = fieldQuery.value || '';
+    const endpoint = `https://rickandmortyapi.com/api/character/?name=${value}`;
+
+    updatePage({
+      current: endpoint
+    });
+  }
+
   return (
     <div className={styles.container}>
       <Head>
@@ -79,15 +95,22 @@ const Home: NextPage = ({data}: any) => {
           Rick and Morty Character Wiki
         </p>
 
+        <form className="search">
+          <input name="query" type="search" onSubmit={handleOnSubmitSearch} />
+          <button>Search</button>
+        </form>
+
         <ul className={styles.grid}>
           {results.map((result: { id: string; name: string; image: string; }) => {
             const { id, name, image } = result;
             return (
                 <li key={id} className="card">
-                  <a href="#">
-                    <img src={image} alt={`${name} Thumbnail`} />
-                    <h3>{ name }</h3>
-                  </a>
+                  <Link href="/character/[id]" as={`/character/${id}`}>
+                    <a>
+                      <img src={image} alt={`${name} Thumbnail`} />
+                      <h3>{ name }</h3>
+                    </a>
+                  </Link>
                 </li>
             )
           })}
