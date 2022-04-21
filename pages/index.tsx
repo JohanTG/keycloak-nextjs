@@ -1,9 +1,10 @@
-import {useEffect, useState} from 'react';
+import {SyntheticEvent, useEffect, useState} from 'react';
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
 import styles from '../styles/Home.module.scss'
+import withAuth from "./withAuth";
 
 const defaultEndpoint = `https://rickandmortyapi.com/api/character/`;
 
@@ -63,11 +64,10 @@ const Home: NextPage = ({data}: any) => {
     });
   }
 
-  function handleOnSubmitSearch(e) {
+  function handleOnSubmitSearch(e: SyntheticEvent) {
     e.preventDefault();
 
-    const { currentTarget = {} } = e;
-    const fields = Array.from(currentTarget?.elements);
+    const fields = Array.from(e.currentTarget?.elements);
     const fieldQuery = fields.find(field => field.name === 'query');
 
     const value = fieldQuery.value || '';
@@ -136,4 +136,4 @@ const Home: NextPage = ({data}: any) => {
   )
 }
 
-export default Home
+export default withAuth(Home)

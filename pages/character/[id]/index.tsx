@@ -2,6 +2,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import Image from 'next/image'
 import styles from '../../../styles/Character.module.scss'
+import withAuth from "../../withAuth";
 
 const defaultEndpoint = `https://rickandmortyapi.com/api/character/`;
 
@@ -16,7 +17,7 @@ export async function getServerSideProps({ query }) {
   }
 }
 
-export default function Character({ data }) {
+const Character = ({ data }) => {
   const { name, image, gender, location, origin, species, status } = data;
 
   return (
@@ -84,3 +85,5 @@ export default function Character({ data }) {
     </div>
   )
 }
+
+export default withAuth(Character);
